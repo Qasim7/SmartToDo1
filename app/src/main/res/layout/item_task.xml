@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="75dp"
+    >
+
+    <View
+        android:id="@+id/seperatorView"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="#757575">
+
+    </View>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:padding="4dp">
+
+        <CheckBox
+            android:id="@+id/checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="4dp"
+            android:padding="4dp"/>
+
+        <TextView
+            android:id="@+id/startTime"
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            android:text="09:00"
+            android:textColor="#5219e4"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/finishTime"
+            android:layout_width="36dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/startTime"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:text="20:00"
+            android:textColor="#1565C0"
+            android:textSize="12sp" />
+
+        <View
+            android:id="@+id/colourTask"
+            android:layout_width="4dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="#F44336"
+            android:layout_toRightOf="@id/checkbox">
+
+        </View>
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_toRightOf="@id/colourTask"
+    android:layout_centerInParent="true">
+        <TextView
+            android:id="@+id/titleTask"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:text="title of task"
+            android:textColor="#000"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/descriptionTask"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/titleTask"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:text="description of task"
+            android:textSize="16sp"
+            />
+
+</RelativeLayout>
+    </RelativeLayout>
+</RelativeLayout>
