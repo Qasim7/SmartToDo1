@@ -12,7 +12,7 @@ public class Task {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
-    private String colour;
+    private int colour;
 
     private String title;
 
@@ -39,11 +39,11 @@ public class Task {
         this.id = id;
     }
 
-    public String getColour() {
+    public int getColour() {
         return colour;
     }
 
-    public void setColour(String colour) {
+    public void setColour(int colour) {
         this.colour = colour;
     }
 

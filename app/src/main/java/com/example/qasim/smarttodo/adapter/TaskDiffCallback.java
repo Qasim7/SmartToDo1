@@ -1,4 +1,4 @@
-package com.example.qasim.smarttodo.controller;
+package com.example.qasim.smarttodo.adapter;
 
 import android.support.annotation.Nullable;
 import android.support.v7.util.DiffUtil;

@@ -5,26 +5,30 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.example.qasim.smarttodo.controller.TaskController;
+import com.example.qasim.smarttodo.adapter.TaskAdapter;
 import com.example.qasim.smarttodo.database.AppDatabase;
 import com.example.qasim.smarttodo.model.Task;
+import com.example.qasim.smarttodo.util.SwipeToDeleteCallback;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
     private static final int REQUEST_FOR_TASK = 100;
 
-    List<Task> tasklist;
-    RecyclerView recyclerView;
-    TaskController taskController;
+    private List<Task> tasklist;
+    private TaskAdapter taskAdapter;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +48,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         tasklist = AppDatabase.getDatabase(getApplicationContext()).taskDao().getAllTasks();
-        taskController = new TaskController(tasklist, this);
+        taskAdapter = new TaskAdapter(tasklist, this);
         recyclerView = findViewById(R.id.recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(taskController);
-        //recyclerView.addItemDecoration(new DividerItemDecoration();
+        recyclerView.setAdapter(taskAdapter);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+        ItemTouchHelper itemTouchHelper=new ItemTouchHelper(new SwipeToDeleteCallback(taskAdapter));
+        itemTouchHelper.attachToRecyclerView(recyclerView);
 
     }
 
@@ -77,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 if (resultCode == NewTaskActivity.RESULT_CODE_UPDATE) {
                     tasklist = AppDatabase.getDatabase(getApplicationContext()).taskDao().getAllTasks();
 //                    Log.e("MainActivity",tasklist.toString());
-                    taskController.updateTaskListItems(tasklist);
+                    taskAdapter.updateTaskListItems(tasklist);
                 }
                 break;
         }
