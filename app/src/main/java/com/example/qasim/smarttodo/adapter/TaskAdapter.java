@@ -1,12 +1,14 @@
 package com.example.qasim.smarttodo.adapter;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.example.qasim.smarttodo.R;
@@ -43,6 +45,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskView> {
             taskView.description.setVisibility(View.GONE);
         taskView.description.setText(currentTask.getDescription());
         taskView.title.setText(currentTask.getTitle());
+        if (taskView.checkBox.isChecked())
+            taskView.title.setPaintFlags(taskView.title.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
         taskView.startTime.setText(currentTask.getStartTime());
         if (currentTask.getFinishTime()==null)
             taskView.finishTime.setVisibility(View.GONE);
@@ -94,6 +98,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskView> {
     public class TaskView extends RecyclerView.ViewHolder {
         View view;
         TextView title, description, startTime, finishTime;
+        CheckBox checkBox;
 
         public TaskView(@NonNull View itemView) {
             super(itemView);
@@ -102,6 +107,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskView> {
             finishTime = itemView.findViewById(R.id.finishTime);
             title = itemView.findViewById(R.id.titleTask);
             description = itemView.findViewById(R.id.descriptionTask);
+            checkBox=itemView.findViewById(R.id.checkbox);
         }
     }
 
