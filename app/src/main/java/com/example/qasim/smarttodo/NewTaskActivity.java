@@ -4,7 +4,9 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
@@ -25,6 +27,8 @@ public class NewTaskActivity extends AppCompatActivity {
 
     public static final int RESULT_CODE_UPDATE = 100;
     private static final int NOT_UPDATE = 101;
+    private static final String TAG = "NewTaskActivity";
+//    private TaskAdapter taskAdapter;
     private TextView txtDateTime;
     private TextView txtColor;
     private Calendar date;
@@ -32,7 +36,7 @@ public class NewTaskActivity extends AppCompatActivity {
     private EditText ed_description;
     private ColorSeekBar colorSeekBar;
     private Task task;
-    private TaskAdapter.TaskView taskView;
+    private FloatingActionButton fab_task;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +47,7 @@ public class NewTaskActivity extends AppCompatActivity {
         ed_description = findViewById(R.id.edt_desc);
         txtDateTime = findViewById(R.id.txt_datetime);
         txtColor = findViewById(R.id.txtColor);
+        fab_task = findViewById(R.id.fab_new_task);
 
         colorSeekBar = findViewById(R.id.colorSlider);
         colorSeekBar.setMaxPosition(100);
@@ -58,37 +63,80 @@ public class NewTaskActivity extends AppCompatActivity {
             }
         });
 
+        final int id = getIntent().getIntExtra("id", -1);
+        if (id == -1) {
 
-        findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                task = new Task();
+            fab_task.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    task = new Task();
 
-                String title = ed_title.getText().toString();
-                String description = ed_description.getText().toString();
-                String startTime = txtDateTime.getText().toString();
-                int color = colorSeekBar.getColor();
+                    String title = ed_title.getText().toString();
+                    String description = ed_description.getText().toString();
+                    String startTime = txtDateTime.getText().toString();
+                    int color = colorSeekBar.getColor();
 
-                if (title.isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "Title is empty", Toast.LENGTH_SHORT).show();
-                } else {
-                    task.setTitle(title);
-                    task.setDescription(description);
-                    task.setColour(color);
-                    if (startTime.equals("start time")) {
-                        task.setStartTime("");
+                    if (title.isEmpty()) {
+                        Toast.makeText(getApplicationContext(), "Title is empty", Toast.LENGTH_SHORT).show();
                     } else {
-                        task.setStartTime(startTime);
+                        task.setTitle(title);
+                        task.setDescription(description);
+                        task.setColour(color);
+                        if (startTime.equals("start time")) {
+                            task.setStartTime("");
+                        } else {
+                            task.setStartTime(startTime);
+                        }
+                        AppDatabase.getDatabase(getApplicationContext()).taskDao().insert(task);
+                        setResult(RESULT_CODE_UPDATE);
+                        finish();
                     }
-                    AppDatabase.getDatabase(getApplicationContext()).taskDao().insert(task);
-                    setResult(RESULT_CODE_UPDATE);
-                    finish();
+
+
                 }
+            });
+        } else {
+            /*
+            taski update etmek ucun yazdim bu serti
+             */
+            ed_title.setText(getIntent().getStringExtra("title"));
+            ed_description.setText(getIntent().getStringExtra("description"));
+            txtDateTime.setText(getIntent().getStringExtra("startTime"));
+            colorSeekBar.setColor(getIntent().getIntExtra("color", 0));
+//            final int position = getIntent().getIntExtra("position", -1);
+//            Log.e(TAG, "onCreate: "+position);   // bu positionda olan update olunmush taski gostermek ucun
+            fab_task.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    task = new Task();
 
 
-            }
-        });
+                    String title = ed_title.getText().toString();
+                    String description = ed_description.getText().toString();
+                    String startTime = txtDateTime.getText().toString();
+                    int color = colorSeekBar.getColor();
 
+                    if (title.isEmpty()) {
+                        Toast.makeText(getApplicationContext(), "Title is empty", Toast.LENGTH_SHORT).show();
+                    } else {
+                        task.setId(id);
+                        task.setTitle(title);
+                        task.setDescription(description);
+                        task.setColour(color);
+                        if (startTime.equals("start time")) {
+                            task.setStartTime("");
+                        } else {
+                            task.setStartTime(startTime);
+                        }
+                        AppDatabase.getDatabase(getApplicationContext()).taskDao().update(task);
+//                        taskAdapter.notifyItemChanged(position);  //taski update etmək üçünç nullpointer exception gosterir
+                        finish();
+                    }
+
+                }
+            });
+        }
 
         txtDateTime.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,4 +179,5 @@ public class NewTaskActivity extends AppCompatActivity {
         setResult(NOT_UPDATE);
         super.onBackPressed();
     }
+
 }

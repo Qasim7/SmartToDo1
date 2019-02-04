@@ -1,6 +1,7 @@
 package com.example.qasim.smarttodo.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.v7.util.DiffUtil;
@@ -9,8 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.qasim.smarttodo.NewTaskActivity;
 import com.example.qasim.smarttodo.R;
 import com.example.qasim.smarttodo.database.AppDatabase;
 import com.example.qasim.smarttodo.model.Task;
@@ -39,19 +42,32 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskView> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TaskView taskView, int i) {
-        Task currentTask = tasks.get(i);
+    public void onBindViewHolder(@NonNull TaskView taskView, final int position) {
+        final Task currentTask = tasks.get(position);
         if (currentTask.getDescription().isEmpty())
             taskView.description.setVisibility(View.GONE);
         taskView.description.setText(currentTask.getDescription());
         taskView.title.setText(currentTask.getTitle());
         if (taskView.checkBox.isChecked())
-            taskView.title.setPaintFlags(taskView.title.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
+            taskView.title.setPaintFlags(taskView.title.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         taskView.startTime.setText(currentTask.getStartTime());
-        if (currentTask.getFinishTime()==null)
+        if (currentTask.getFinishTime() == null)
             taskView.finishTime.setVisibility(View.GONE);
         taskView.finishTime.setText(currentTask.getFinishTime());
         taskView.view.setBackgroundColor(currentTask.getColour());
+        taskView.parentLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, NewTaskActivity.class); //taski update etmek ucun
+                intent.putExtra("id",currentTask.getId());
+                intent.putExtra("title",currentTask.getTitle());
+                intent.putExtra("description",currentTask.getDescription());
+                intent.putExtra("startTime",currentTask.getStartTime());
+                intent.putExtra("color",currentTask.getColour());
+                intent.putExtra("position",position);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -60,13 +76,16 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskView> {
             return 0;
         return tasks.size();
     }
+
+
+
     public void deleteItem(int position) {
 //        mPosition = position;
         task = tasks.get(position);
         tasks.remove(position);
         AppDatabase.getDatabase(context).taskDao().delete(task);
         notifyItemRemoved(position);
-//        showUndoSnackbar();
+//        showUndoSnackbar();   //uno delete snackbar yazdim ama exception gosterdi
 
     }
 
@@ -86,10 +105,9 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskView> {
 //    }
 
 
-
-    public void updateTaskListItems(List<Task> tasks){
-        final TaskDiffCallback diffCallback=new TaskDiffCallback(this.tasks,tasks);
-        final DiffUtil.DiffResult diffResult= DiffUtil.calculateDiff(diffCallback);
+    public void updateTaskListItems(List<Task> tasks) {
+        final TaskDiffCallback diffCallback = new TaskDiffCallback(this.tasks, tasks);
+        final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
         this.tasks.clear();
         this.tasks.addAll(tasks);
         diffResult.dispatchUpdatesTo(this);
@@ -99,15 +117,17 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskView> {
         View view;
         TextView title, description, startTime, finishTime;
         CheckBox checkBox;
+        RelativeLayout parentLayout;
 
         public TaskView(@NonNull View itemView) {
             super(itemView);
-            view=itemView.findViewById(R.id.colourTask);
+            view = itemView.findViewById(R.id.colourTask);
             startTime = itemView.findViewById(R.id.startTime);
             finishTime = itemView.findViewById(R.id.finishTime);
             title = itemView.findViewById(R.id.titleTask);
             description = itemView.findViewById(R.id.descriptionTask);
-            checkBox=itemView.findViewById(R.id.checkbox);
+            checkBox = itemView.findViewById(R.id.checkbox);
+            parentLayout = itemView.findViewById(R.id.parentLayout);
         }
     }
 

@@ -26,6 +26,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_FOR_TASK = 100;
+    private static final String TAG = "mainactivity";
 
     private List<Task> tasklist;
     private TaskAdapter taskAdapter;
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final FloatingActionButton fab = findViewById(R.id.fab);
+        final FloatingActionButton fab = findViewById(R.id.fab_new_task);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -89,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -103,4 +105,5 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
+
 }
