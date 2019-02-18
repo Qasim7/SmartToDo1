@@ -36,7 +36,11 @@ public class TaskDiffCallback extends DiffUtil.Callback {
     public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
         final Task oldTask=mOldTaskList.get(oldItemPosition);
         final Task newTask=mNewTaskList.get(newItemPosition);
-        return oldTask.getTitle().equals(newTask.getTitle());
+        return oldTask.getTitle().equals(newTask.getTitle())
+                && oldTask.getDescription().equals(newTask.getDescription())
+                && oldTask.getStartTime().equals(newTask.getStartTime())
+                && oldTask.getFinishTime().equals(newTask.getFinishTime())
+                && oldTask.getColour()==newTask.getColour();
     }
 
     @Nullable

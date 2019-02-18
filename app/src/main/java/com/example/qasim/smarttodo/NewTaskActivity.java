@@ -1,6 +1,5 @@
 package com.example.qasim.smarttodo;
 
-import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -9,13 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.example.qasim.smarttodo.adapter.TaskAdapter;
 import com.example.qasim.smarttodo.database.AppDatabase;
 import com.example.qasim.smarttodo.model.Task;
 import com.rtugeek.android.colorseekbar.ColorSeekBar;
@@ -28,8 +25,8 @@ public class NewTaskActivity extends AppCompatActivity {
     public static final int RESULT_CODE_UPDATE = 100;
     private static final int NOT_UPDATE = 101;
     private static final String TAG = "NewTaskActivity";
-//    private TaskAdapter taskAdapter;
-    private TextView txtDateTime;
+    private TextView txtStartTime;
+    private TextView txtFinishTime;
     private TextView txtColor;
     private Calendar date;
     private EditText ed_title;
@@ -42,11 +39,13 @@ public class NewTaskActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_task);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ed_title = findViewById(R.id.edt_title);
         ed_description = findViewById(R.id.edt_desc);
-        txtDateTime = findViewById(R.id.txt_datetime);
-        txtColor = findViewById(R.id.txtColor);
+        txtStartTime = findViewById(R.id.txt_start_time);
+        txtFinishTime = findViewById(R.id.txt_finish_time);
+        txtColor = findViewById(R.id.txt_color);
         fab_task = findViewById(R.id.fab_new_task);
 
         colorSeekBar = findViewById(R.id.colorSlider);
@@ -69,109 +68,124 @@ public class NewTaskActivity extends AppCompatActivity {
             fab_task.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    task = new Task();
-
-                    String title = ed_title.getText().toString();
-                    String description = ed_description.getText().toString();
-                    String startTime = txtDateTime.getText().toString();
-                    int color = colorSeekBar.getColor();
-
-                    if (title.isEmpty()) {
-                        Toast.makeText(getApplicationContext(), "Title is empty", Toast.LENGTH_SHORT).show();
-                    } else {
-                        task.setTitle(title);
-                        task.setDescription(description);
-                        task.setColour(color);
-                        if (startTime.equals("start time")) {
-                            task.setStartTime("");
-                        } else {
-                            task.setStartTime(startTime);
-                        }
-                        AppDatabase.getDatabase(getApplicationContext()).taskDao().insert(task);
-                        setResult(RESULT_CODE_UPDATE);
-                        finish();
-                    }
-
-
+                    insertNewTask();
                 }
             });
         } else {
-            /*
-            taski update etmek ucun yazdim bu serti
-             */
+
             ed_title.setText(getIntent().getStringExtra("title"));
             ed_description.setText(getIntent().getStringExtra("description"));
-            txtDateTime.setText(getIntent().getStringExtra("startTime"));
+            txtStartTime.setText(getIntent().getStringExtra("startTime"));
+            txtFinishTime.setText(getIntent().getStringExtra("finishTime"));
             colorSeekBar.setColor(getIntent().getIntExtra("color", 0));
 //            final int position = getIntent().getIntExtra("position", -1);
 //            Log.e(TAG, "onCreate: "+position);   // bu positionda olan update olunmush taski gostermek ucun
             fab_task.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    task = new Task();
-
-
-                    String title = ed_title.getText().toString();
-                    String description = ed_description.getText().toString();
-                    String startTime = txtDateTime.getText().toString();
-                    int color = colorSeekBar.getColor();
-
-                    if (title.isEmpty()) {
-                        Toast.makeText(getApplicationContext(), "Title is empty", Toast.LENGTH_SHORT).show();
-                    } else {
-                        task.setId(id);
-                        task.setTitle(title);
-                        task.setDescription(description);
-                        task.setColour(color);
-                        if (startTime.equals("start time")) {
-                            task.setStartTime("");
-                        } else {
-                            task.setStartTime(startTime);
-                        }
-                        AppDatabase.getDatabase(getApplicationContext()).taskDao().update(task);
-//                        taskAdapter.notifyItemChanged(position);  //taski update etmək üçünç nullpointer exception gosterir
-                        finish();
-                    }
-
+                    updateTask(id);
                 }
             });
         }
 
-        txtDateTime.setOnClickListener(new View.OnClickListener() {
+        txtStartTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                onStartTimeClick();
 
-                final Calendar currentDate = Calendar.getInstance();
-                date = Calendar.getInstance();
-                DatePickerDialog datePickerDialog = new DatePickerDialog(NewTaskActivity.this, new DatePickerDialog.OnDateSetListener() {
+            }
+        });
 
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
-
-                        date.set(year, monthOfYear, dayOfMonth);
-                        new TimePickerDialog(NewTaskActivity.this, new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                date.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                                date.set(Calendar.MINUTE, minute);
-                                // Log.v(TAG, "The choosen one " + date.getTime());
-                                // Toast.makeText(getContext(),"The choosen one " + date.getTime(),Toast.LENGTH_SHORT).show();
-                                txtDateTime.setText(new SimpleDateFormat("HH:mm dd/MM/yyyy").format(date.getTime()));
-
-                            }
-                        }, currentDate.get(Calendar.HOUR_OF_DAY), currentDate.get(Calendar.MINUTE), true).show();
-
-                    }
-                }, currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DATE));
-                datePickerDialog.getDatePicker().setMinDate(currentDate.getTimeInMillis());
-                datePickerDialog.show();
+        txtFinishTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onFinishTimeClick();
             }
         });
 
 
+    }
+
+    private void onFinishTimeClick() {
+        final Calendar currentDate = Calendar.getInstance();
+        date = Calendar.getInstance();
+
+        new TimePickerDialog(NewTaskActivity.this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                date.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                date.set(Calendar.MINUTE, minute);
+                // Log.v(TAG, "The choosen one " + date.getTime());
+                // Toast.makeText(getContext(),"The choosen one " + date.getTime(),Toast.LENGTH_SHORT).show();
+                txtFinishTime.setText(new SimpleDateFormat("HH:mm").format(date.getTime()));
+
+            }
+        }, currentDate.get(Calendar.HOUR_OF_DAY), currentDate.get(Calendar.MINUTE), true).show();
+    }
+
+    private void onStartTimeClick() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(),0);
+
+        final Calendar currentDate = Calendar.getInstance();
+        date = Calendar.getInstance();
+
+        new TimePickerDialog(NewTaskActivity.this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                date.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                date.set(Calendar.MINUTE, minute);
+                // Log.v(TAG, "The choosen one " + date.getTime());
+                // Toast.makeText(getContext(),"The choosen one " + date.getTime(),Toast.LENGTH_SHORT).show();
+                txtStartTime.setText(new SimpleDateFormat("HH:mm").format(date.getTime()));
+
+            }
+        }, currentDate.get(Calendar.HOUR_OF_DAY), currentDate.get(Calendar.MINUTE), true).show();
+    }
+
+    private void updateTask(int id) {
+        task = new Task();
+        String title = ed_title.getText().toString();
+        String description = ed_description.getText().toString();
+        String startTime = txtStartTime.getText().toString();
+        String finishTime = txtFinishTime.getText().toString();
+        int color = colorSeekBar.getColor();
+
+        if (title.isEmpty()) {
+            Toast.makeText(getApplicationContext(), "Title is empty", Toast.LENGTH_SHORT).show();
+        } else {
+            task.setId(id);
+            task.setTitle(title);
+            task.setDescription(description);
+            task.setColour(color);
+            task.setStartTime(startTime);
+            task.setFinishTime(finishTime);
+            AppDatabase.getDatabase(getApplicationContext()).taskDao().update(task);
+            setResult(RESULT_CODE_UPDATE);
+            finish();
+        }
+    }
+
+    private void insertNewTask() {
+        task = new Task();
+        String title = ed_title.getText().toString();
+        String description = ed_description.getText().toString();
+        String startTime = txtStartTime.getText().toString();
+        String finishTime = txtFinishTime.getText().toString();
+        int color = colorSeekBar.getColor();
+
+        if (title.isEmpty()) {
+            Toast.makeText(getApplicationContext(), "Title is empty", Toast.LENGTH_SHORT).show();
+        } else {
+            task.setTitle(title);
+            task.setDescription(description);
+            task.setColour(color);
+            task.setStartTime(startTime);
+            task.setFinishTime(finishTime);
+            AppDatabase.getDatabase(getApplicationContext()).taskDao().insert(task);
+            setResult(RESULT_CODE_UPDATE);
+            finish();
+        }
     }
 
     @Override

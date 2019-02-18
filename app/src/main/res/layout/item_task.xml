@@ -15,12 +15,14 @@
         android:layout_margin="4dp"
         android:padding="4dp" />
 
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/lineartime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_centerInParent="true">
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/startTime"
@@ -35,12 +37,11 @@
             android:id="@+id/finishTime"
             android:layout_width="36dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/startTime"
             android:maxLines="1"
             android:text="20:00"
             android:textColor="#1565C0"
             android:textSize="12sp" />
-    </RelativeLayout>
+    </LinearLayout>
 
     <View
         android:id="@+id/colourTask"
@@ -48,16 +49,20 @@
         android:layout_height="match_parent"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
+        android:background="#F44336"
         android:layout_toRightOf="@id/checkbox"
-        android:background="#F44336">
+        android:layout_toEndOf="@id/checkbox">
 
     </View>
 
-    <RelativeLayout
-        android:layout_width="280dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_toRightOf="@id/colourTask">
+        android:weightSum=".80"
+        android:orientation="vertical"
+        android:layout_toRightOf="@id/colourTask"
+        android:layout_toLeftOf="@id/lineartime">
 
         <TextView
             android:id="@+id/titleTask"
@@ -74,12 +79,11 @@
             android:id="@+id/descriptionTask"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/titleTask"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:maxLines="1"
             android:text="description of task"
             android:textSize="16sp" />
 
-    </RelativeLayout>
+    </LinearLayout>
 </RelativeLayout>

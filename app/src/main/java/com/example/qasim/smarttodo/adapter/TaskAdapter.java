@@ -1,5 +1,6 @@
 package com.example.qasim.smarttodo.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
@@ -25,7 +26,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskView> {
     private List<Task> tasks;
     public Context context;
     private Task task;
-//    private int mPosition;
 
     public TaskAdapter(List<Task> tasks, Context context) {
         this.tasks = tasks;
@@ -44,30 +44,48 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskView> {
     @Override
     public void onBindViewHolder(@NonNull TaskView taskView, final int position) {
         final Task currentTask = tasks.get(position);
-        if (currentTask.getDescription().isEmpty())
-            taskView.description.setVisibility(View.GONE);
+        if (currentTask.getDescription().isEmpty()){
+            taskView.description.setVisibility(View.GONE);}
+        else { taskView.description.setVisibility(View.VISIBLE);}
         taskView.description.setText(currentTask.getDescription());
         taskView.title.setText(currentTask.getTitle());
-        if (taskView.checkBox.isChecked())
-            taskView.title.setPaintFlags(taskView.title.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-        taskView.startTime.setText(currentTask.getStartTime());
-        if (currentTask.getFinishTime() == null)
-            taskView.finishTime.setVisibility(View.GONE);
-        taskView.finishTime.setText(currentTask.getFinishTime());
+//        if (task.isCompleted())
+//            taskView.title.setPaintFlags(taskView.title.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        switch (currentTask.getStartTime()){
+            case "start time":
+                taskView.startTime.setText("");
+                break;
+                default: taskView.startTime.setText(currentTask.getStartTime());
+
+        }
+        switch (currentTask.getFinishTime()){
+            case "finish time":
+                taskView.finishTime.setText("");
+                taskView.finishTime.setVisibility(View.GONE);
+                break;
+                default: taskView.finishTime.setText(currentTask.getFinishTime());
+                taskView.finishTime.setVisibility(View.VISIBLE);
+
+        }
         taskView.view.setBackgroundColor(currentTask.getColour());
+
         taskView.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, NewTaskActivity.class); //taski update etmek ucun
-                intent.putExtra("id",currentTask.getId());
-                intent.putExtra("title",currentTask.getTitle());
-                intent.putExtra("description",currentTask.getDescription());
-                intent.putExtra("startTime",currentTask.getStartTime());
-                intent.putExtra("color",currentTask.getColour());
-                intent.putExtra("position",position);
-                context.startActivity(intent);
+                editTask(currentTask);
             }
         });
+    }
+
+    private void editTask(Task currentTask) {
+        Intent intent = new Intent(context, NewTaskActivity.class); //taski update etmek ucun
+        intent.putExtra("id",currentTask.getId());
+        intent.putExtra("title",currentTask.getTitle());
+        intent.putExtra("description",currentTask.getDescription());
+        intent.putExtra("startTime",currentTask.getStartTime());
+        intent.putExtra("finishTime",currentTask.getFinishTime());
+        intent.putExtra("color",currentTask.getColour());
+        ((Activity)context).startActivityForResult(intent,100);
     }
 
     @Override

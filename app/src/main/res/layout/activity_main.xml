@@ -38,7 +38,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
-        android:backgroundTint="#2196F3"
+        android:backgroundTint="#2874A6"
+        app:backgroundTint="#34495E"
         android:src="@drawable/ic_add_black_24dp"
         android:tint="#fff" />
 

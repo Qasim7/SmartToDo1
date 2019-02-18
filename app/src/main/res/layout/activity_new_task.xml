@@ -5,58 +5,79 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="20dp"
     tools:context=".NewTaskActivity">
 
-    <EditText
-        android:id="@+id/edt_title"
-        android:layout_width="match_parent"
+    <ScrollView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@null"
-        android:drawableLeft="@drawable/ic_title_black_24dp"
-        android:hint="title"
-        android:inputType="textCapSentences"
-        android:padding="16dp" />
+        android:padding="20dp">
 
-    <EditText
-        android:id="@+id/edt_desc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/edt_title"
-        android:background="@null"
-        android:drawableLeft="@drawable/ic_description_black_24dp"
-        android:hint="description"
-        android:inputType="textCapSentences|textMultiLine"
-        android:padding="16dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
+            <EditText
+                android:id="@+id/edt_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:padding="16dp"
+                android:drawableLeft="@drawable/ic_title_black_24dp"
+                android:hint="title"
+                android:inputType="textCapSentences"
+                />
 
-    <TextView
-        android:id="@+id/txt_datetime"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/edt_desc"
-        android:drawableLeft="@drawable/ic_alarm_black_24dp"
-        android:padding="16dp"
-        android:text="start time"
-        android:textSize="18sp" />
-
-    <TextView
-        android:id="@+id/txtColor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txt_datetime"
-        android:drawableLeft="@drawable/ic_colorize_black_24dp"
-        android:padding="16dp"
-        android:text="colour"
-        android:textSize="18sp" />
+            <EditText
+                android:id="@+id/edt_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:padding="16dp"
+                android:drawableLeft="@drawable/ic_description_black_24dp"
+                android:hint="description"
+                android:inputType="textCapSentences|textMultiLine"
+                />
 
 
-    <com.rtugeek.android.colorseekbar.ColorSeekBar
-        android:id="@+id/colorSlider"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtColor"
-        app:colorSeeds="@array/material_colors" />
+            <TextView
+                android:id="@+id/txt_start_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:textSize="18sp"
+                android:drawableLeft="@drawable/ic_alarm_black_24dp"
+                android:text="start time"
+                />
+
+            <TextView
+                android:id="@+id/txt_finish_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:textSize="18sp"
+                android:drawableLeft="@drawable/ic_alarm_black_24dp"
+                android:text="finish time"
+                />
+
+            <TextView
+                android:id="@+id/txt_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:textSize="18sp"
+                android:drawableLeft="@drawable/ic_colorize_black_24dp"
+                android:text="colour"
+                />
+
+
+            <com.rtugeek.android.colorseekbar.ColorSeekBar
+                android:id="@+id/colorSlider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:colorSeeds="@array/material_colors" />
+        </LinearLayout>
+    </ScrollView>
 
     <ScrollView
         android:layout_width="wrap_content"
@@ -69,8 +90,9 @@
             android:id="@+id/fab_new_task"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:backgroundTint="#4DB6AC"
+            android:layout_margin="16dp"
+            android:backgroundTint="#138D75"
+            app:backgroundTint="#34495E"
             android:src="@drawable/ic_check_black_24dp" />
     </ScrollView>
 </RelativeLayout>
