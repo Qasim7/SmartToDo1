@@ -29,6 +29,11 @@
             android:windowSoftInputMode="stateAlwaysHidden">
 
         </activity>
+
+        <receiver
+            android:name=".AlarmReceiver"
+            android:enabled="true"
+            android:exported="true" />
     </application>
 
 </manifest>

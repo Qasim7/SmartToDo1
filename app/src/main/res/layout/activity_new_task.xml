@@ -60,6 +60,8 @@
                 android:text="finish time"
                 />
 
+            <include layout="@layout/weekdays" />
+
             <TextView
                 android:id="@+id/txt_color"
                 android:layout_width="match_parent"

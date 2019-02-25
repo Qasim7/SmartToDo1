@@ -1,11 +1,13 @@
 package com.example.qasim.smarttodo;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -16,11 +18,14 @@ import android.widget.Toast;
 import com.example.qasim.smarttodo.database.AppDatabase;
 import com.example.qasim.smarttodo.model.Task;
 import com.rtugeek.android.colorseekbar.ColorSeekBar;
+import com.touchboarder.weekdaysbuttons.WeekdaysDataItem;
+import com.touchboarder.weekdaysbuttons.WeekdaysDataSource;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
-public class NewTaskActivity extends AppCompatActivity {
+public class NewTaskActivity extends AppCompatActivity implements WeekdaysDataSource.Callback {
 
     public static final int RESULT_CODE_UPDATE = 100;
     private static final int NOT_UPDATE = 101;
@@ -34,6 +39,7 @@ public class NewTaskActivity extends AppCompatActivity {
     private ColorSeekBar colorSeekBar;
     private Task task;
     private FloatingActionButton fab_task;
+    private PendingIntent pendingIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,20 +54,34 @@ public class NewTaskActivity extends AppCompatActivity {
         txtColor = findViewById(R.id.txt_color);
         fab_task = findViewById(R.id.fab_new_task);
 
-        colorSeekBar = findViewById(R.id.colorSlider);
-        colorSeekBar.setMaxPosition(100);
-        colorSeekBar.setColorSeeds(R.array.material_colors); // material_colors is defalut included in res/color,just use it.
-        colorSeekBar.setColorBarPosition(10); //0 - maxValue
-        colorSeekBar.setBarHeight(2); //5dpi
-        colorSeekBar.setThumbHeight(50); //30dpi
+        WeekdaysDataSource weekdaysDataSource = new WeekdaysDataSource(this, R.id.weekdays_stub).start(this);
 
-        colorSeekBar.setOnColorChangeListener(new ColorSeekBar.OnColorChangeListener() {
+        /* Retrieve a PendingIntent that will perform a broadcast */
+        Intent alarmIntent = new Intent(NewTaskActivity.this, AlarmReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(NewTaskActivity.this, 0, alarmIntent, 0);
+
+        setupColorSeekBar();
+        fabClicked();
+
+        txtStartTime.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onColorChangeListener(int colorBarPosition, int alphaBarPosition, int color) {
-                txtColor.setTextColor(color);
+            public void onClick(View v) {
+                onStartTimeClick();
+
             }
         });
 
+        txtFinishTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onFinishTimeClick();
+            }
+        });
+
+
+    }
+
+    private void fabClicked() {
         final int id = getIntent().getIntExtra("id", -1);
         if (id == -1) {
 
@@ -87,23 +107,22 @@ public class NewTaskActivity extends AppCompatActivity {
                 }
             });
         }
+    }
 
-        txtStartTime.setOnClickListener(new View.OnClickListener() {
+    private void setupColorSeekBar() {
+        colorSeekBar = findViewById(R.id.colorSlider);
+        colorSeekBar.setMaxPosition(100);
+        colorSeekBar.setColorSeeds(R.array.material_colors); // material_colors is defalut included in res/color,just use it.
+        colorSeekBar.setColorBarPosition(10); //0 - maxValue
+        colorSeekBar.setBarHeight(2); //5dpi
+        colorSeekBar.setThumbHeight(50); //30dpi
+
+        colorSeekBar.setOnColorChangeListener(new ColorSeekBar.OnColorChangeListener() {
             @Override
-            public void onClick(View v) {
-                onStartTimeClick();
-
+            public void onColorChangeListener(int colorBarPosition, int alphaBarPosition, int color) {
+                txtColor.setTextColor(color);
             }
         });
-
-        txtFinishTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onFinishTimeClick();
-            }
-        });
-
-
     }
 
     private void onFinishTimeClick() {
@@ -125,7 +144,7 @@ public class NewTaskActivity extends AppCompatActivity {
 
     private void onStartTimeClick() {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(),0);
+        imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
 
         final Calendar currentDate = Calendar.getInstance();
         date = Calendar.getInstance();
@@ -141,6 +160,12 @@ public class NewTaskActivity extends AppCompatActivity {
 
             }
         }, currentDate.get(Calendar.HOUR_OF_DAY), currentDate.get(Calendar.MINUTE), true).show();
+
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        int interval = 1000 * 60 * 20;
+        manager.setRepeating(AlarmManager.RTC_WAKEUP, currentDate.getTimeInMillis(),
+                interval, pendingIntent);
+
     }
 
     private void updateTask(int id) {
@@ -194,4 +219,13 @@ public class NewTaskActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
+    @Override
+    public void onWeekdaysItemClicked(int i, WeekdaysDataItem weekdaysDataItem) {
+
+    }
+
+    @Override
+    public void onWeekdaysSelected(int i, ArrayList<WeekdaysDataItem> arrayList) {
+
+    }
 }

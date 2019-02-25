@@ -49,6 +49,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        setupRecycler(fab);
+
+    }
+
+    private void setupRecycler(final FloatingActionButton fab) {
         tasklist = AppDatabase.getDatabase(getApplicationContext()).taskDao().getAllTasks();
         taskAdapter = new TaskAdapter(tasklist, this);
         recyclerView = findViewById(R.id.recycler);
@@ -67,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
 
         ItemTouchHelper itemTouchHelper=new ItemTouchHelper(new SwipeToDeleteCallback(taskAdapter));
         itemTouchHelper.attachToRecyclerView(recyclerView);
-
     }
 
     @Override
