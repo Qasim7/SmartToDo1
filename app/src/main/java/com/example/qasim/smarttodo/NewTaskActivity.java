@@ -1,5 +1,6 @@
 package com.example.qasim.smarttodo;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
@@ -11,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -32,7 +34,7 @@ public class NewTaskActivity extends AppCompatActivity implements WeekdaysDataSo
     private static final String TAG = "NewTaskActivity";
     private TextView txtStartTime;
     private TextView txtFinishTime;
-    private TextView txtColor;
+    //    private View viewColor;
     private Calendar date;
     private EditText ed_title;
     private EditText ed_description;
@@ -40,6 +42,8 @@ public class NewTaskActivity extends AppCompatActivity implements WeekdaysDataSo
     private Task task;
     private FloatingActionButton fab_task;
     private PendingIntent pendingIntent;
+    private Switch aSwitch;
+    private AlarmManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +55,9 @@ public class NewTaskActivity extends AppCompatActivity implements WeekdaysDataSo
         ed_description = findViewById(R.id.edt_desc);
         txtStartTime = findViewById(R.id.txt_start_time);
         txtFinishTime = findViewById(R.id.txt_finish_time);
-        txtColor = findViewById(R.id.txt_color);
+//        viewColor = findViewById(R.id.view_color);
         fab_task = findViewById(R.id.fab_new_task);
-
-        WeekdaysDataSource weekdaysDataSource = new WeekdaysDataSource(this, R.id.weekdays_stub).start(this);
+        aSwitch = findViewById(R.id.switchReminder);
 
         /* Retrieve a PendingIntent that will perform a broadcast */
         Intent alarmIntent = new Intent(NewTaskActivity.this, AlarmReceiver.class);
@@ -120,7 +123,7 @@ public class NewTaskActivity extends AppCompatActivity implements WeekdaysDataSo
         colorSeekBar.setOnColorChangeListener(new ColorSeekBar.OnColorChangeListener() {
             @Override
             public void onColorChangeListener(int colorBarPosition, int alphaBarPosition, int color) {
-                txtColor.setTextColor(color);
+//                viewColor.setbackgroundColor(color);
             }
         });
     }
@@ -142,6 +145,7 @@ public class NewTaskActivity extends AppCompatActivity implements WeekdaysDataSo
         }, currentDate.get(Calendar.HOUR_OF_DAY), currentDate.get(Calendar.MINUTE), true).show();
     }
 
+    @SuppressLint("ShortAlarm")
     private void onStartTimeClick() {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
@@ -161,10 +165,16 @@ public class NewTaskActivity extends AppCompatActivity implements WeekdaysDataSo
             }
         }, currentDate.get(Calendar.HOUR_OF_DAY), currentDate.get(Calendar.MINUTE), true).show();
 
-        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        int interval = 1000 * 60 * 20;
-        manager.setRepeating(AlarmManager.RTC_WAKEUP, currentDate.getTimeInMillis(),
-                interval, pendingIntent);
+        aSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (aSwitch.isChecked()) {
+                    manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                    manager.set(AlarmManager.RTC_WAKEUP, date.getTimeInMillis(), pendingIntent);
+                }
+                Toast.makeText(getApplicationContext(), "Alarm is set", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 

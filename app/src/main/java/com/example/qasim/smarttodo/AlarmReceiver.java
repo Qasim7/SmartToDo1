@@ -5,19 +5,14 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.media.MediaPlayer;
+import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
-import android.widget.Toast;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
-    MediaPlayer mediaPlayer;
-
-
     @Override
     public void onReceive(Context context, Intent intent) {
-        Toast.makeText(context, "Alarm running", Toast.LENGTH_SHORT).show();
         PendingIntent contentIntent =
                 PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), 0);
 
@@ -27,12 +22,11 @@ public class AlarmReceiver extends BroadcastReceiver {
                 .setContentText("alarm is running")
                 .setContentIntent(contentIntent)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setSound(Uri.parse("android.resource://com.example.qasim.smarttodo/" + R.raw.beep_beep))
                 .setAutoCancel(true)
                 .build();
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);
         managerCompat.notify(1, notification);
-        mediaPlayer = MediaPlayer.create(context, R.raw.alarm_beep);
-        mediaPlayer.start();
 
     }
 

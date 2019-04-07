@@ -3,7 +3,6 @@ package com.example.qasim.smarttodo.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
@@ -98,29 +97,13 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskView> {
 
 
     public void deleteItem(int position) {
-//        mPosition = position;
         task = tasks.get(position);
         tasks.remove(position);
         AppDatabase.getDatabase(context).taskDao().delete(task);
         notifyItemRemoved(position);
-//        showUndoSnackbar();   //uno delete snackbar yazdim ama exception gosterdi
-
+//        mainActivity.deleteAlert(position);//interface ile yoxla ve yaxud abstract classla
     }
 
-//    private void showUndoSnackbar() {
-//        View view=mainActivity.findViewById(R.id.coordinatorLayout);
-//        Snackbar snackbar=Snackbar.make(view,"Task deleted",Snackbar.LENGTH_LONG);
-//        snackbar.setAction("UNDO", new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                tasks.add(mPosition,task);
-//                AppDatabase.getDatabase(context).taskDao().insert(task);
-//                notifyItemInserted(mPosition);
-//            }
-//        });
-//        snackbar.show();
-//        snackbar.setActionTextColor(Color.GREEN);
-//    }
 
 
     public void updateTaskListItems(List<Task> tasks) {
