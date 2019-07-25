@@ -34,21 +34,44 @@
                 android:hint="description"
                 android:inputType="textCapSentences|textMultiLine"
                 />
-
+            <LinearLayout
+                android:id="@+id/linear_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+            <TextView
+                style="@style/TextStyle"
+                android:drawableLeft="@drawable/ic_alarm_black_24dp"
+                android:text="start time "
+                />
 
             <TextView
                 android:id="@+id/txt_start_time"
                 style="@style/TextStyle"
+                android:text=""
+                />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_finish"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextStyle"
                 android:drawableLeft="@drawable/ic_alarm_black_24dp"
-                android:text="start time"
+                android:text="finish time"
                 />
 
             <TextView
                 android:id="@+id/txt_finish_time"
                 style="@style/TextStyle"
-                android:drawableLeft="@drawable/ic_alarm_black_24dp"
-                android:text="finish time"
+                android:text=""
                 />
+
+            </LinearLayout>
+
 
             <Switch
                 android:id="@+id/switchReminder"
@@ -57,11 +80,6 @@
                 android:text="reminder" />
 
 
-            <android.support.v7.widget.CardView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                app:cardBackgroundColor="@color/design_default_color_primary_dark"
-                app:cardCornerRadius="4dp"></android.support.v7.widget.CardView>
             <com.rtugeek.android.colorseekbar.ColorSeekBar
                 android:id="@+id/colorSlider"
                 android:layout_width="match_parent"

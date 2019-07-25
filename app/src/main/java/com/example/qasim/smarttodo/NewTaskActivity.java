@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -45,6 +46,7 @@ public class NewTaskActivity extends AppCompatActivity implements WeekdaysDataSo
     private Switch aSwitch;
     private AlarmManager manager;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +68,7 @@ public class NewTaskActivity extends AppCompatActivity implements WeekdaysDataSo
         setupColorSeekBar();
         fabClicked();
 
-        txtStartTime.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.linear_start).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onStartTimeClick();
@@ -74,7 +76,7 @@ public class NewTaskActivity extends AppCompatActivity implements WeekdaysDataSo
             }
         });
 
-        txtFinishTime.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.linear_finish).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onFinishTimeClick();
@@ -119,6 +121,8 @@ public class NewTaskActivity extends AppCompatActivity implements WeekdaysDataSo
         colorSeekBar.setColorBarPosition(10); //0 - maxValue
         colorSeekBar.setBarHeight(2); //5dpi
         colorSeekBar.setThumbHeight(50); //30dpi
+        colorSeekBar.setAlphaBarPosition(30);
+        colorSeekBar.setShowAlphaBar(true);
 
         colorSeekBar.setOnColorChangeListener(new ColorSeekBar.OnColorChangeListener() {
             @Override

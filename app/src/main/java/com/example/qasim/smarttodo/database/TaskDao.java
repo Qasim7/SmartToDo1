@@ -19,7 +19,7 @@ public interface TaskDao {
     @Delete
     void delete(Task task);
 
-    @Query("SELECT * FROM task_table;")
+    @Query("SELECT * FROM task_table order by startTime")
     List<Task> getAllTasks();
 
     @Update
