@@ -1,25 +1,20 @@
-package com.example.qasim.smarttodo;
+package com.smarttodoapp.qasim.smarttodo;
 
 import android.annotation.SuppressLint;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.example.qasim.smarttodo.database.AppDatabase;
-import com.example.qasim.smarttodo.model.Task;
+import com.smarttodoapp.qasim.smarttodo.database.AppDatabase;
+import com.smarttodoapp.qasim.smarttodo.model.Task;
 import com.rtugeek.android.colorseekbar.ColorSeekBar;
 import com.touchboarder.weekdaysbuttons.WeekdaysDataItem;
 import com.touchboarder.weekdaysbuttons.WeekdaysDataSource;
@@ -42,10 +37,6 @@ public class NewTaskActivity extends AppCompatActivity implements WeekdaysDataSo
     private ColorSeekBar colorSeekBar;
     private Task task;
     private FloatingActionButton fab_task;
-    private PendingIntent pendingIntent;
-    private Switch aSwitch;
-    private AlarmManager manager;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +50,10 @@ public class NewTaskActivity extends AppCompatActivity implements WeekdaysDataSo
         txtFinishTime = findViewById(R.id.txt_finish_time);
 //        viewColor = findViewById(R.id.view_color);
         fab_task = findViewById(R.id.fab_new_task);
-        aSwitch = findViewById(R.id.switchReminder);
 
-        /* Retrieve a PendingIntent that will perform a broadcast */
-        Intent alarmIntent = new Intent(NewTaskActivity.this, AlarmReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(NewTaskActivity.this, 0, alarmIntent, 0);
+//        /* Retrieve a PendingIntent that will perform a broadcast */
+//        Intent alarmIntent = new Intent(NewTaskActivity.this, AlarmReceiver.class);
+//        pendingIntent = PendingIntent.getBroadcast(NewTaskActivity.this, 0, alarmIntent, 0);
 
         setupColorSeekBar();
         fabClicked();
@@ -169,16 +159,6 @@ public class NewTaskActivity extends AppCompatActivity implements WeekdaysDataSo
             }
         }, currentDate.get(Calendar.HOUR_OF_DAY), currentDate.get(Calendar.MINUTE), true).show();
 
-        aSwitch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (aSwitch.isChecked()) {
-                    manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                    manager.set(AlarmManager.RTC_WAKEUP, date.getTimeInMillis(), pendingIntent);
-                }
-                Toast.makeText(getApplicationContext(), "Alarm is set", Toast.LENGTH_SHORT).show();
-            }
-        });
 
     }
 

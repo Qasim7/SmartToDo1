@@ -1,4 +1,4 @@
-package com.example.qasim.smarttodo.database;
+package com.smarttodoapp.qasim.smarttodo.database;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
@@ -6,7 +6,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
-import com.example.qasim.smarttodo.model.Task;
+import com.smarttodoapp.qasim.smarttodo.model.Task;
 
 import java.util.List;
 

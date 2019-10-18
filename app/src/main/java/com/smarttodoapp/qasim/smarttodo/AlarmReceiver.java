@@ -1,4 +1,4 @@
-package com.example.qasim.smarttodo;
+package com.smarttodoapp.qasim.smarttodo;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -22,7 +22,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 .setContentText("alarm is running")
                 .setContentIntent(contentIntent)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setSound(Uri.parse("android.resource://com.example.qasim.smarttodo/" + R.raw.beep_beep))
+                .setSound(Uri.parse("android.resource://com.smarttodoapp.qasim.smarttodo/" + R.raw.beep_beep))
                 .setAutoCancel(true)
                 .build();
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);

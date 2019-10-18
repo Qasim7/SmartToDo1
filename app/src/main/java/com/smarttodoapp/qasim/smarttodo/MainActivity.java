@@ -1,4 +1,4 @@
-package com.example.qasim.smarttodo;
+package com.smarttodoapp.qasim.smarttodo;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,12 +19,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 
-import com.example.qasim.smarttodo.adapter.TaskAdapter;
-import com.example.qasim.smarttodo.database.AppDatabase;
-import com.example.qasim.smarttodo.model.Task;
+import com.smarttodoapp.qasim.smarttodo.adapter.TaskAdapter;
+import com.smarttodoapp.qasim.smarttodo.database.AppDatabase;
+import com.smarttodoapp.qasim.smarttodo.model.Task;
 
 import java.util.List;
 
@@ -35,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
 
     private List<Task> tasklist;
     public TaskAdapter taskAdapter;
-    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private void setupRecycler(final FloatingActionButton fab) {
         tasklist = AppDatabase.getDatabase(getApplicationContext()).taskDao().getAllTasks();
         taskAdapter = new TaskAdapter(tasklist, this);
-        recyclerView = findViewById(R.id.recycler);
+        RecyclerView recyclerView = findViewById(R.id.recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(taskAdapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
@@ -151,21 +149,6 @@ public class MainActivity extends AppCompatActivity {
         builder.create().show();
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu_main, menu);
-//        return true;
-//    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
 
     @Override

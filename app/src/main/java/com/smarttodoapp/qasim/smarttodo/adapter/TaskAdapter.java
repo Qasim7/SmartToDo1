@@ -1,4 +1,4 @@
-package com.example.qasim.smarttodo.adapter;
+package com.smarttodoapp.qasim.smarttodo.adapter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,10 +14,10 @@ import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.qasim.smarttodo.NewTaskActivity;
-import com.example.qasim.smarttodo.R;
-import com.example.qasim.smarttodo.database.AppDatabase;
-import com.example.qasim.smarttodo.model.Task;
+import com.smarttodoapp.qasim.smarttodo.NewTaskActivity;
+import com.smarttodoapp.qasim.smarttodo.R;
+import com.smarttodoapp.qasim.smarttodo.database.AppDatabase;
+import com.smarttodoapp.qasim.smarttodo.model.Task;
 
 import java.util.List;
 
@@ -53,6 +53,21 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskView> {
         taskView.title.setText(currentTask.getTitle());
 //        if (task.isCompleted())
 //            taskView.title.setPaintFlags(taskView.title.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
+//        String date24=currentTask.getStartTime();
+//        DateFormat dateFormat=new SimpleDateFormat("HH:mm");
+//        DateFormat outputFormat=new SimpleDateFormat("hh:mm aa");
+//        Date date=null;
+//        String toDate12=null;
+//        try{
+//            //Conversion of input String to date
+//            date= dateFormat.parse(date24);
+//            //old date format to new date format
+//            toDate12 = outputFormat.format(date);
+//            taskView.startTime.setText(toDate12);
+//        }catch(ParseException pe){
+//            pe.printStackTrace();
+//        }
         taskView.startTime.setText(currentTask.getStartTime());
 
 

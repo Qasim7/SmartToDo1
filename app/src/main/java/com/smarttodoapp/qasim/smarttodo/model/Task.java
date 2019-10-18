@@ -1,10 +1,7 @@
-package com.example.qasim.smarttodo.model;
+package com.smarttodoapp.qasim.smarttodo.model;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
-import android.arch.persistence.room.TypeConverters;
-
-import com.example.qasim.smarttodo.util.DateConverter;
 
 @Entity(tableName = "task_table")
 public class Task {
@@ -18,7 +15,6 @@ public class Task {
 
     private String description;
 
-//    @TypeConverters(DateConverter.class)
     private String startTime;
 
     private String finishTime;

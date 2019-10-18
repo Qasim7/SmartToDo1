@@ -1,4 +1,4 @@
-package com.example.qasim.smarttodo;
+package com.smarttodoapp.qasim.smarttodo;
 
 import org.junit.Test;
 

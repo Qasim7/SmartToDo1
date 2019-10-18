@@ -73,13 +73,6 @@
             </LinearLayout>
 
 
-            <Switch
-                android:id="@+id/switchReminder"
-                style="@style/TextStyle"
-                android:drawableLeft="@drawable/ic_notifications_black_24dp"
-                android:text="reminder" />
-
-
             <com.rtugeek.android.colorseekbar.ColorSeekBar
                 android:id="@+id/colorSlider"
                 android:layout_width="match_parent"

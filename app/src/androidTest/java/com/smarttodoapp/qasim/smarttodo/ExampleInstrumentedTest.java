@@ -1,4 +1,4 @@
-package com.example.qasim.smarttodo;
+package com.smarttodoapp.qasim.smarttodo;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.qasim.smarttodo", appContext.getPackageName());
+        assertEquals("com.smarttodoapp.qasim.smarttodo", appContext.getPackageName());
     }
 }

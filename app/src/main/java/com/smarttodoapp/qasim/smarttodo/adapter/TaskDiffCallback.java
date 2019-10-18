@@ -1,9 +1,9 @@
-package com.example.qasim.smarttodo.adapter;
+package com.smarttodoapp.qasim.smarttodo.adapter;
 
 import android.support.annotation.Nullable;
 import android.support.v7.util.DiffUtil;
 
-import com.example.qasim.smarttodo.model.Task;
+import com.smarttodoapp.qasim.smarttodo.model.Task;
 
 import java.util.List;
 
